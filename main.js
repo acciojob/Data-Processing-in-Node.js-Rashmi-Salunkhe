@@ -1,11 +1,18 @@
-Implement the processData function in app.js:
+const fs = require("fs").promises;
 
-const fs = require('fs');
-const { Transform } = require('stream');
-
-function processData(inputFilePath, outputFilePath) {
-  // Implement this function
+async function processData(inputFilePath, outputFilePath) {
+  try {
+    const data = await fs.readFile(inputFilePath, "utf8");
+    const upperCasedData = data.toUpperCase();
+    await fs.writeFile(outputFilePath, upperCasedData);
+  } catch (error) {
+    console.error("Error processing data:", error);
+    process.exit(1); 
+  }
 }
 
-processData('input.txt', 'output.txt');
+if (require.main === module) {
 
+  const [inputFilePath, outputFilePath] = process.argv.slice(2);
+  processData(inputFilePath, outputFilePath);
+}
